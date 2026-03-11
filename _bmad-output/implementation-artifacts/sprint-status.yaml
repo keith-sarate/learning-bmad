@@ -50,7 +50,7 @@ development_status:
   2-1-board-state-management-persistence-foundation: done
   2-2-card-creation-with-color-selection: done
   2-3-card-display-component: review
-  2-4-inline-card-editing: backlog
+  2-4-inline-card-editing: review
   epic-2-retrospective: optional
 
   epic-3: backlog
