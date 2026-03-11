@@ -46,8 +46,8 @@ development_status:
   1-3-board-layout-three-columns-sketchy-visual-aesthetic: done
   epic-1-retrospective: optional
 
-  epic-2: backlog
-  2-1-board-state-management-persistence-foundation: backlog
+  epic-2: in-progress
+  2-1-board-state-management-persistence-foundation: done
   2-2-card-creation-with-color-selection: backlog
   2-3-card-display-component: backlog
   2-4-inline-card-editing: backlog
