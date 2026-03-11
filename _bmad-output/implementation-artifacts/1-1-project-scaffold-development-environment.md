@@ -1,6 +1,6 @@
 # Story 1.1: Project Scaffold & Development Environment
 
-Status: ready-for-dev
+Status: review
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -26,36 +26,36 @@ So that the team has a consistent, runnable local development environment ready 
 
 ## Tasks / Subtasks
 
-- [ ] Task 1 — Scaffold the Vite project (AC: #1)
-  - [ ] Run `npm create vite@latest sticky-board -- --template react-ts` in the workspace root
-  - [ ] Run `cd sticky-board && npm install` to install baseline vite dependencies
-  - [ ] Verify dev server starts (`npm run dev`) and app renders at localhost with HMR
-- [ ] Task 2 — Install all approved runtime dependencies (AC: #2)
-  - [ ] Run `npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities roughjs`
-  - [ ] Verify all four packages appear in `dependencies` section of `package.json`
-- [ ] Task 3 — Install all approved dev/test dependencies (AC: #2, #5)
-  - [ ] Run `npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom`
-  - [ ] Add `test` script to `package.json`: `"test": "vitest"`
-  - [ ] Configure `vite.config.ts` to add Vitest configuration (`test: { environment: 'jsdom', setupFiles: ['./src/setupTests.ts'] }`)
-  - [ ] Create `src/setupTests.ts` with `import '@testing-library/jest-dom'`
-  - [ ] Create a smoke test `src/App.test.tsx` that renders `<App />` and verifies it mounts without error
-  - [ ] Run `npm run test` and verify it executes without configuration errors
-- [ ] Task 4 — Configure TypeScript strict mode (AC: #3)
-  - [ ] Open `tsconfig.json` and ensure `"strict": true` is set in `compilerOptions`
-  - [ ] Run `npm run build` and resolve any TypeScript strict-mode errors from the scaffold default files
-  - [ ] Confirm `dist/` folder is generated successfully
-- [ ] Task 5 — Create mandatory project directory structure (AC: #4)
-  - [ ] Create `src/components/` directory (add `.gitkeep` placeholder)
-  - [ ] Create `src/services/` directory (add `.gitkeep` placeholder)
-  - [ ] Create `src/hooks/` directory (add `.gitkeep` placeholder)
-  - [ ] Create `src/context/` directory (add `.gitkeep` placeholder)
-  - [ ] Create `src/types/` directory (add `.gitkeep` placeholder)
-  - [ ] Create `src/styles/` directory (add `.gitkeep` placeholder)
-  - [ ] Create `src/assets/` directory (add `.gitkeep` placeholder)
-- [ ] Task 6 — Verify bundle size constraint (AC: #6)
-  - [ ] Run `npm run build`
-  - [ ] Measure total gzipped JS output: `find dist/assets -name "*.js" | xargs gzip -c | wc -c`
-  - [ ] Confirm total is under 400KB (409,600 bytes) — scaffold alone will be well under this limit
+- [x] Task 1 — Scaffold the Vite project (AC: #1)
+  - [x] Run `npm create vite@latest sticky-board -- --template react-ts` in the workspace root
+  - [x] Run `cd sticky-board && npm install` to install baseline vite dependencies
+  - [x] Verify dev server starts (`npm run dev`) and app renders at localhost with HMR
+- [x] Task 2 — Install all approved runtime dependencies (AC: #2)
+  - [x] Run `npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities roughjs`
+  - [x] Verify all four packages appear in `dependencies` section of `package.json`
+- [x] Task 3 — Install all approved dev/test dependencies (AC: #2, #5)
+  - [x] Run `npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom`
+  - [x] Add `test` script to `package.json`: `"test": "vitest"`
+  - [x] Configure `vite.config.ts` to add Vitest configuration (`test: { environment: 'jsdom', setupFiles: ['./src/setupTests.ts'], globals: true }`)
+  - [x] Create `src/setupTests.ts` with `import '@testing-library/jest-dom'`
+  - [x] Create a smoke test `src/App.test.tsx` that renders `<App />` and verifies it mounts without error
+  - [x] Run `npm run test` and verify it executes without configuration errors
+- [x] Task 4 — Configure TypeScript strict mode (AC: #3)
+  - [x] Open `tsconfig.json` and ensure `"strict": true` is set in `compilerOptions`
+  - [x] Run `npm run build` and resolve any TypeScript strict-mode errors from the scaffold default files
+  - [x] Confirm `dist/` folder is generated successfully
+- [x] Task 5 — Create mandatory project directory structure (AC: #4)
+  - [x] Create `src/components/` directory (add `.gitkeep` placeholder)
+  - [x] Create `src/services/` directory (add `.gitkeep` placeholder)
+  - [x] Create `src/hooks/` directory (add `.gitkeep` placeholder)
+  - [x] Create `src/context/` directory (add `.gitkeep` placeholder)
+  - [x] Create `src/types/` directory (add `.gitkeep` placeholder)
+  - [x] Create `src/styles/` directory (add `.gitkeep` placeholder)
+  - [x] Create `src/assets/` directory (add `.gitkeep` placeholder)
+- [x] Task 6 — Verify bundle size constraint (AC: #6)
+  - [x] Run `npm run build`
+  - [x] Measure total gzipped JS output: `find dist/assets -name "*.js" | xargs gzip -c | wc -c`
+  - [x] Confirm total is under 400KB (409,600 bytes) — scaffold alone will be well under this limit
 
 ## Dev Notes
 
@@ -183,6 +183,43 @@ Claude Sonnet 4.6
 
 ### Debug Log References
 
+- Task 3: Vitest v4 requires `globals: true` in the test config and `import defineConfig from 'vitest/config'` (not `vite`) to properly type the `test` property for TypeScript strict builds.
+- Task 4: `strict: true` was pre-set by Vite scaffold in `tsconfig.app.json`; added `vitest/globals` to types array for globals support.
+
 ### Completion Notes List
 
+- ✅ Scaffolded `sticky-board/` with `npm create vite@latest` using `react-ts` template (Vite 7.3.1, React 19, TypeScript 5)
+- ✅ Installed runtime deps: `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`, `roughjs`
+- ✅ Installed dev/test deps: `vitest`, `@testing-library/react`, `@testing-library/jest-dom`, `jsdom`
+- ✅ Configured Vitest in `vite.config.ts` with `jsdom` environment, `globals: true`, and setup file
+- ✅ Created `src/setupTests.ts` and `src/App.test.tsx` smoke test — 1 test passes
+- ✅ `strict: true` confirmed in `tsconfig.app.json`; production build generates `dist/` with no errors
+- ✅ All 7 required `src/` subdirectories created with `.gitkeep` placeholders
+- ✅ Gzipped JS bundle: ~60.8KB (limit: 400KB / 409,600 bytes)
+- All 6 Acceptance Criteria satisfied
+
 ### File List
+
+- sticky-board/package.json
+- sticky-board/vite.config.ts
+- sticky-board/tsconfig.json
+- sticky-board/tsconfig.app.json
+- sticky-board/tsconfig.node.json
+- sticky-board/index.html
+- sticky-board/src/main.tsx
+- sticky-board/src/App.tsx
+- sticky-board/src/App.css
+- sticky-board/src/index.css
+- sticky-board/src/setupTests.ts
+- sticky-board/src/App.test.tsx
+- sticky-board/src/components/.gitkeep
+- sticky-board/src/services/.gitkeep
+- sticky-board/src/hooks/.gitkeep
+- sticky-board/src/context/.gitkeep
+- sticky-board/src/types/.gitkeep
+- sticky-board/src/styles/.gitkeep
+- sticky-board/src/assets/.gitkeep
+
+## Change Log
+
+- 2026-03-11: Initial implementation — scaffolded `sticky-board/` with Vite 7 + React 19 + TypeScript 5, installed all approved runtime and dev dependencies, configured Vitest 4 with jsdom environment and globals, created smoke test, verified all 6 ACs including bundle size (~60.8KB gzipped, limit 400KB). Story marked ready for review.
