@@ -5,6 +5,16 @@
   min-height: var(--card-min-height);
   cursor: pointer;
   font-family: var(--font-handwritten);
+  transition: opacity var(--transition-done-fade), filter var(--transition-done-fade);
+}
+
+.card.is-done {
+  opacity: 0.55;
+  filter: saturate(0.7);
+}
+
+.card.is-done .card-title {
+  font-weight: var(--font-weight-bold);
 }
 
 .card-title {
@@ -13,4 +23,15 @@
   margin: 0;
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-card);
+}
+
+.card-description {
+  font-size: var(--font-size-card-desc);
+  color: var(--color-text-card-desc);
+  margin: var(--spacing-xs) 0 0 0;
+  font-family: var(--font-handwritten);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-card);
+  max-height: 120px;
+  overflow-y: auto;
 }

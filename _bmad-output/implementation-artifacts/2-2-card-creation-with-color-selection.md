@@ -1,6 +1,6 @@
 # Story 2.2: Card Creation with Color Selection
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 

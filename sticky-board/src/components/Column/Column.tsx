@@ -71,7 +71,7 @@ function Column({ id, title, emptyStateText, cards, children }: ColumnProps) {
         <div className="column-cards">
           {isTodo && <CardCreationPad />}
           {(cards ?? []).map((card) => (
-            <CardComponent key={card.id} card={card} />
+            <CardComponent key={card.id} card={card} isDone={id === 'done'} />
           ))}
           {children}
           {showEmptyState && (

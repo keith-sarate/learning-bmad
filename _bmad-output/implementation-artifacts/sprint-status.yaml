@@ -48,8 +48,8 @@ development_status:
 
   epic-2: in-progress
   2-1-board-state-management-persistence-foundation: done
-  2-2-card-creation-with-color-selection: review
-  2-3-card-display-component: backlog
+  2-2-card-creation-with-color-selection: done
+  2-3-card-display-component: review
   2-4-inline-card-editing: backlog
   epic-2-retrospective: optional
 
