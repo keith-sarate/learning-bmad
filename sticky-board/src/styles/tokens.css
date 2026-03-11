@@ -1,0 +1,77 @@
+:root {
+  /* =========================================
+     Card Colors — warm-shifted post-it palette
+     ========================================= */
+  --color-card-yellow: #FFE135;   /* Classic sticky note; warm, primary */
+  --color-card-pink: #FF9E9E;     /* Soft, approachable */
+  --color-card-blue: #A8D8EA;     /* Cool focus, calm */
+  --color-card-green: #B8E0B0;    /* Nature, growth, progress */
+  --color-card-orange: #FFB880;   /* Energy, urgency */
+  --color-card-purple: #D4AAEA;   /* Creative, different */
+
+  /* =========================================
+     Board & Surface Colors
+     ========================================= */
+  --color-board-background: #F5EFE0;             /* Warm parchment — THE defining color */
+  --color-column-background: #EDE8D8;             /* Marginally darker to define column zones */
+  --color-column-border: #8B7355;                 /* Warm brown — rendered via rough.js not CSS */
+  --color-card-shadow: rgba(0, 0, 0, 0.15);       /* Physical depth, not garish */
+  --color-done-overlay: rgba(255, 255, 255, 0.5); /* Done card fade overlay */
+
+  /* =========================================
+     Text Colors
+     ========================================= */
+  --color-text-primary: #2C2416;        /* Warm dark brown, not harsh black — card body */
+  --color-text-column-header: #5C4A2A;  /* Warm brown for column labels */
+  --color-text-card-desc: #4A3A28;      /* Slightly lighter for description text */
+  --color-text-empty-state: #9A8C78;    /* Muted — placeholder text in empty column */
+
+  /* =========================================
+     Destructive / Trash Zone
+     ========================================= */
+  --color-trash-rest: #8B7355;    /* Neutral warm brown at rest */
+  --color-trash-active: #E8584A;  /* Warm red when active during drag */
+
+  /* =========================================
+     Typography
+     ========================================= */
+  --font-handwritten: 'Caveat', 'Patrick Hand', cursive;
+  --font-size-column-header: 1.25rem;   /* 20px */
+  --font-size-card-title: 1.05rem;      /* ~17px */
+  --font-size-card-desc: 0.875rem;      /* 14px */
+  --font-size-empty-state: 0.9rem;      /* ~14.4px */
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+  --line-height-base: 1.5;              /* Default document line height */
+  --line-height-card: 1.4;              /* Handwritten fonts need extra breathing room */
+
+  /* =========================================
+     Spacing — 8px base unit, all multiples
+     ========================================= */
+  --spacing-base: 8px;
+  --spacing-xs: 4px;    /* 0.5× base */
+  --spacing-sm: 8px;    /* 1× base */
+  --spacing-md: 16px;   /* 2× base */
+  --spacing-lg: 24px;   /* 3× base */
+  --spacing-xl: 32px;   /* 4× base */
+  --spacing-2xl: 48px;  /* 6× base */
+
+  /* =========================================
+     Layout
+     ========================================= */
+  --board-max-width: 1400px;
+  --column-padding: 20px;    /* Internal column padding */
+  --gap-columns: 24px;       /* Space between columns */
+  --gap-cards: 12px;         /* Space between cards in a column */
+  --card-min-height: 80px;   /* Enough for title + one line desc */
+  --border-radius-card: 2px; /* Cards nearly square; minimal rounding */
+
+  /* =========================================
+     Animation Timing
+     ========================================= */
+  --transition-default: 200ms ease;
+  --transition-card-lift: 150ms ease-out;   /* Card picking up */
+  --transition-done-fade: 300ms ease;       /* Done column fade-in after drop */
+  --duration-drop-settle: 250ms;            /* Card snap to position after drop */
+  --card-drag-tilt-angle: 6deg;             /* Physical tilt during drag (5–8° range) */
+}
