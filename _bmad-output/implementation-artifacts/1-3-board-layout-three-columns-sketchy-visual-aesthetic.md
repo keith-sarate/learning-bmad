@@ -1,6 +1,6 @@
 # Story 1.3: Board Layout, Three Columns & Sketchy Visual Aesthetic
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -28,63 +28,63 @@ So that I immediately understand the board structure and feel the tactile, physi
 
 ## Tasks / Subtasks
 
-- [ ] Task 1 — Create `src/types/types.ts` with minimal types needed for Board/Column (AC: #1)
-  - [ ] Create `src/types/types.ts` and delete the `.gitkeep` placeholder in `src/types/`
-  - [ ] Export `type ColumnId = 'todo' | 'inProgress' | 'done'` — used by Board and Column now, extended in Story 2.1
-  - [ ] Export `interface ColumnConfig { id: ColumnId; title: string; emptyStateText: string }` — static column definitions
-  - [ ] Add `TODO: Story 2.1 will add Card, BoardState, CardColor, StorageError, BoardContextValue here` comment
+- [x] Task 1 — Create `src/types/types.ts` with minimal types needed for Board/Column (AC: #1)
+  - [x] Create `src/types/types.ts` and delete the `.gitkeep` placeholder in `src/types/`
+  - [x] Export `type ColumnId = 'todo' | 'inProgress' | 'done'` — used by Board and Column now, extended in Story 2.1
+  - [x] Export `interface ColumnConfig { id: ColumnId; title: string; emptyStateText: string }` — static column definitions
+  - [x] Add `TODO: Story 2.1 will add Card, BoardState, CardColor, StorageError, BoardContextValue here` comment
 
-- [ ] Task 2 — Create `src/components/Column/Column.tsx` and `Column.css` (AC: #1, #3, #4, #5, #6, #7)
-  - [ ] Create directory `src/components/Column/`
-  - [ ] Create `Column.tsx` with `ColumnProps: { id: ColumnId; title: string; emptyStateText: string; children?: React.ReactNode }`
-  - [ ] Use `useRef<HTMLDivElement>` for the column container and `useRef<SVGSVGElement>` for the rough.js SVG
-  - [ ] Implement `drawSketchyBorder()` helper that reads border and background colors via `getComputedStyle(document.documentElement)`, clears the SVG, then calls `rough.svg(svgRef.current)` and appends `rc.rectangle(...)` child
-  - [ ] Use `useEffect` to call `drawSketchyBorder()` on mount
-  - [ ] Add `ResizeObserver` in the same `useEffect` to re-call `drawSketchyBorder()` on column resize; clean up observer in return
-  - [ ] Render column-header `<h2>` with `{title}` and `className="column-header"`
-  - [ ] Render `{children}` in the cards area — placeholder `<div className="column-cards">` for now (Story 2+ will populate)
-  - [ ] Render empty-state `<div className="column-empty-state">` with `{emptyStateText}` that is ONLY shown when `!children` (or no card children — for now always show since no cards exist)
-  - [ ] Export `default Column`
-  - [ ] Create `Column.css`: column container (position relative, flex column, overflow-y auto for independent scroll), absolutely-positioned `pointer-events: none; z-index: 0` SVG layer for rough.js, column-inner layout layer at `z-index: 1`, column-header styles using `var(--font-handwritten)`, `var(--font-size-column-header)`, `var(--color-text-column-header)`, column-empty-state with `var(--color-text-empty-state)`, `var(--font-size-empty-state)`, `var(--font-handwritten)`
+- [x] Task 2 — Create `src/components/Column/Column.tsx` and `Column.css` (AC: #1, #3, #4, #5, #6, #7)
+  - [x] Create directory `src/components/Column/`
+  - [x] Create `Column.tsx` with `ColumnProps: { id: ColumnId; title: string; emptyStateText: string; children?: React.ReactNode }`
+  - [x] Use `useRef<HTMLDivElement>` for the column container and `useRef<SVGSVGElement>` for the rough.js SVG
+  - [x] Implement `drawSketchyBorder()` helper that reads border and background colors via `getComputedStyle(document.documentElement)`, clears the SVG, then calls `rough.svg(svgRef.current)` and appends `rc.rectangle(...)` child
+  - [x] Use `useEffect` to call `drawSketchyBorder()` on mount
+  - [x] Add `ResizeObserver` in the same `useEffect` to re-call `drawSketchyBorder()` on column resize; clean up observer in return
+  - [x] Render column-header `<h2>` with `{title}` and `className="column-header"`
+  - [x] Render `{children}` in the cards area — placeholder `<div className="column-cards">` for now (Story 2+ will populate)
+  - [x] Render empty-state `<div className="column-empty-state">` with `{emptyStateText}` that is ONLY shown when `!children` (or no card children — for now always show since no cards exist)
+  - [x] Export `default Column`
+  - [x] Create `Column.css`: column container (position relative, flex column, overflow-y auto for independent scroll), absolutely-positioned `pointer-events: none; z-index: 0` SVG layer for rough.js, column-inner layout layer at `z-index: 1`, column-header styles using `var(--font-handwritten)`, `var(--font-size-column-header)`, `var(--color-text-column-header)`, column-empty-state with `var(--color-text-empty-state)`, `var(--font-size-empty-state)`, `var(--font-handwritten)`
 
-- [ ] Task 3 — Create `src/components/Board/Board.tsx` and `Board.css` (AC: #1, #2, #3, #4)
-  - [ ] Create directory `src/components/Board/`
-  - [ ] Create `Board.tsx`: define the three column configs as a `const COLUMNS: ColumnConfig[]` array with `{ id: 'todo', title: 'To Do', emptyStateText: 'Your tasks go here' }`, `{ id: 'inProgress', title: 'In Progress', emptyStateText: 'Drag cards here to start' }`, `{ id: 'done', title: 'Done', emptyStateText: 'Completed tasks land here' }`
-  - [ ] Use `useRef<HTMLDivElement>` for the board container and `useRef<SVGSVGElement>` for the board-level rough.js SVG
-  - [ ] Implement `drawBoardBackground()` that clears the SVG, reads board dimensions, and draws a full rough.js sketchy rectangle covering the board area using `rough.svg(svgRef.current)` and warm brown stroke — creates the corkboard frame effect
-  - [ ] Use `useEffect` + `ResizeObserver` to call `drawBoardBackground()` on mount and resize; clean up in return
-  - [ ] Render the three `<Column>` components inside a `<div className="board-columns">` grid
-  - [ ] Render an absolutely-positioned `<svg className="board-canvas" ref={boardSvgRef} aria-hidden="true" />` behind the columns
-  - [ ] Export `default Board`
-  - [ ] Create `Board.css`: board container (position relative, max-width `var(--board-max-width)`, margin 0 auto, padding `var(--spacing-md)`, min-height 100vh), board-canvas SVG (position absolute, inset 0, pointer-events none, z-index 0), board-columns (display grid, grid-template-columns `repeat(3, 1fr)`, gap `var(--gap-columns)`, position relative, z-index 1)
+- [x] Task 3 — Create `src/components/Board/Board.tsx` and `Board.css` (AC: #1, #2, #3, #4)
+  - [x] Create directory `src/components/Board/`
+  - [x] Create `Board.tsx`: define the three column configs as a `const COLUMNS: ColumnConfig[]` array with `{ id: 'todo', title: 'To Do', emptyStateText: 'Your tasks go here' }`, `{ id: 'inProgress', title: 'In Progress', emptyStateText: 'Drag cards here to start' }`, `{ id: 'done', title: 'Done', emptyStateText: 'Completed tasks land here' }`
+  - [x] Use `useRef<HTMLDivElement>` for the board container and `useRef<SVGSVGElement>` for the board-level rough.js SVG
+  - [x] Implement `drawBoardBackground()` that clears the SVG, reads board dimensions, and draws a full rough.js sketchy rectangle covering the board area using `rough.svg(svgRef.current)` and warm brown stroke — creates the corkboard frame effect
+  - [x] Use `useEffect` + `ResizeObserver` to call `drawBoardBackground()` on mount and resize; clean up in return
+  - [x] Render the three `<Column>` components inside a `<div className="board-columns">` grid
+  - [x] Render an absolutely-positioned `<svg className="board-canvas" ref={boardSvgRef} aria-hidden="true" />` behind the columns
+  - [x] Export `default Board`
+  - [x] Create `Board.css`: board container (position relative, max-width `var(--board-max-width)`, margin 0 auto, padding `var(--spacing-md)`, min-height 100vh), board-canvas SVG (position absolute, inset 0, pointer-events none, z-index 0), board-columns (display grid, grid-template-columns `repeat(3, 1fr)`, gap `var(--gap-columns)`, position relative, z-index 1)
 
-- [ ] Task 4 — Replace `src/App.tsx` (completely replace Vite scaffold) (AC: #1)
-  - [ ] Replace the current Vite counter/logo content in `App.tsx` with a clean version that imports and renders `<Board />`
-  - [ ] Import `'./App.css'` and `Board` from `'./components/Board/Board'` — NO other imports (no useState, no reactLogo, no viteLogo)
-  - [ ] The App function returns: `<div className="app"><Board /></div>`
-  - [ ] Remove unused imports: `useState`, `reactLogo`, `viteLogo`
+- [x] Task 4 — Replace `src/App.tsx` (completely replace Vite scaffold) (AC: #1)
+  - [x] Replace the current Vite counter/logo content in `App.tsx` with a clean version that imports and renders `<Board />`
+  - [x] Import `'./App.css'` and `Board` from `'./components/Board/Board'` — NO other imports (no useState, no reactLogo, no viteLogo)
+  - [x] The App function returns: `<div className="app"><Board /></div>`
+  - [x] Remove unused imports: `useState`, `reactLogo`, `viteLogo`
 
-- [ ] Task 5 — Clean `src/App.css` (keep #root fix from Story 1.2, add `.app` layout class)
-  - [ ] Remove all Vite-specific classes (`.logo`, `.logo:hover`, `.logo.react:hover`, `@keyframes logo-spin`, `.card`, `.read-the-docs`) from App.css
-  - [ ] Keep the `#root` rule (already cleaned in Story 1.2): `#root { margin: 0 auto; }`
-  - [ ] Add `.app { min-height: 100vh; display: flex; flex-direction: column; }` — minimal app wrapper
+- [x] Task 5 — Clean `src/App.css` (keep #root fix from Story 1.2, add `.app` layout class)
+  - [x] Remove all Vite-specific classes (`.logo`, `.logo:hover`, `.logo.react:hover`, `@keyframes logo-spin`, `.card`, `.read-the-docs`) from App.css
+  - [x] Keep the `#root` rule (already cleaned in Story 1.2): `#root { margin: 0 auto; }`
+  - [x] Add `.app { min-height: 100vh; display: flex; flex-direction: column; }` — minimal app wrapper
 
-- [ ] Task 6 — Update `src/App.test.tsx` to match new App structure (regression guard)
-  - [ ] Replace the current smoke test with one that checks for board-level rendering: import `screen` from RTL, render `<App />`, check that three column headings are present using `screen.getByRole('heading', { name: 'To Do' })`, etc.
-  - [ ] Keep the `renders without crashing` test name or update to something descriptive like `renders board with three columns`
-  - [ ] Run `npm run test` to pass before marking complete
+- [x] Task 6 — Update `src/App.test.tsx` to match new App structure (regression guard)
+  - [x] Replace the current smoke test with one that checks for board-level rendering: import `screen` from RTL, render `<App />`, check that three column headings are present using `screen.getByRole('heading', { name: 'To Do' })`, etc.
+  - [x] Keep the `renders without crashing` test name or update to something descriptive like `renders board with three columns`
+  - [x] Run `npm run test` to pass before marking complete
 
-- [ ] Task 7 — Write `Column.test.tsx` unit tests (AC: #1, #4, #5, #7)
-  - [ ] Create `src/components/Column/Column.test.tsx`
-  - [ ] Test: "renders with the given title as a heading" — `render(<Column id="todo" title="To Do" emptyStateText="..." />)`, expect `screen.getByRole('heading', { name: 'To Do' })` to exist
-  - [ ] Test: "renders empty-state placeholder when no children" — expect the empty-state text to be in the document
-  - [ ] Test: "does not render empty-state when children are provided" — pass a dummy child, expect empty-state text NOT in document
-  - [ ] Note: rough.js will throw/warn in jsdom (no real SVG support) — add a `vi.mock('roughjs', ...)` stub or wrap the draw call in a try/catch; see Dev Notes for the mock pattern
+- [x] Task 7 — Write `Column.test.tsx` unit tests (AC: #1, #4, #5, #7)
+  - [x] Create `src/components/Column/Column.test.tsx`
+  - [x] Test: "renders with the given title as a heading" — `render(<Column id="todo" title="To Do" emptyStateText="..." />)`, expect `screen.getByRole('heading', { name: 'To Do' })` to exist
+  - [x] Test: "renders empty-state placeholder when no children" — expect the empty-state text to be in the document
+  - [x] Test: "does not render empty-state when children are provided" — pass a dummy child, expect empty-state text NOT in document
+  - [x] Note: rough.js will throw/warn in jsdom (no real SVG support) — add a `vi.mock('roughjs', ...)` stub or wrap the draw call in a try/catch; see Dev Notes for the mock pattern
 
-- [ ] Task 8 — Run final checks
-  - [ ] Run `npm run test` from `sticky-board/` — all tests pass (smoke + Column tests)
-  - [ ] Run `npm run build` — no TypeScript or build errors
-  - [ ] Run `npm run dev` and visually confirm: warm cream background, three Caveat-font columns, rough.js sketchy borders visible, empty-state text visible, no Vite logo or counter anywhere
+- [x] Task 8 — Run final checks
+  - [x] Run `npm run test` from `sticky-board/` — all tests pass (smoke + Column tests)
+  - [x] Run `npm run build` — no TypeScript or build errors
+  - [x] Run `npm run dev` and visually confirm: warm cream background, three Caveat-font columns, rough.js sketchy borders visible, empty-state text visible, no Vite logo or counter anywhere
 
 ## Dev Notes
 
@@ -415,10 +415,44 @@ describe('App', () => {
 
 ### Agent Model Used
 
-<!-- to be filled by dev agent -->
+Claude Sonnet 4.6 (GitHub Copilot)
 
 ### Debug Log References
 
+- ResizeObserver not available in jsdom — resolved by adding no-op stub in `setupTests.ts` using `(globalThis as Record<string, unknown>).ResizeObserver`; `global.ResizeObserver` was rejected by TypeScript browser lib
+
 ### Completion Notes List
 
+- Implemented `src/types/types.ts` with `ColumnId` union type and `ColumnConfig` interface; deleted `.gitkeep`
+- Created `Column` component with rough.js SVG sketchy border (zero-size guard handles jsdom), ResizeObserver for responsive redraw, empty-state shown only when no children
+- Created `Board` component with rough.js sketchy background frame, CSS Grid 3-column layout, responsive ResizeObserver
+- Replaced Vite scaffold in `App.tsx` with minimal `<Board />` host; all unused imports removed
+- Cleaned `App.css`: removed all Vite-specific classes, added `.app` layout wrapper
+- Updated `App.test.tsx` to assert three column headings present
+- Wrote `Column.test.tsx` with 3 tests covering title render, empty-state visibility, and empty-state hiding with children
+- All 4 tests pass; `npm run build` succeeds with zero errors/warnings
+
+### Code Review Fixes (2026-03-11)
+
+- **[H1] Fixed independent column scrolling** — moved `overflow-y: auto` from `.column-cards` to `.column-inner`, added `flex: 1; min-height: 0` on `.column-inner` to give it a definite constrained height as a flex child, removed `overflow: hidden` from `.column-inner`. Columns now scroll independently when cards fill the column.
+- **[M2] Fixed sticky column header** — `.column-header { position: sticky }` was non-functional because the scroll container (`.column-inner`) had `overflow: hidden`. Now `.column-inner` is the scroll container (`overflow-y: auto`) so sticky anchors correctly.
+- **[L1] Applied `id` prop** — `Column.tsx` now destructures `id` and sets `data-column-id={id}` on the root `<div>`, enabling DnD drop-target identification in Story 3+.
+- **[L3] Fixed board-columns height** — changed `.board-columns` from `min-height: calc(100vh - var(--spacing-2xl))` (48px subtraction, incorrect) to `height: calc(100vh - var(--spacing-md) * 2)` (32px = 2× board padding, correct). Definite grid height ensures columns receive a definite cross-axis size for scroll to work.
+
 ### File List
+
+- sticky-board/src/types/types.ts (created)
+- sticky-board/src/types/.gitkeep (deleted)
+- sticky-board/src/components/Column/Column.tsx (created)
+- sticky-board/src/components/Column/Column.css (created)
+- sticky-board/src/components/Column/Column.test.tsx (created)
+- sticky-board/src/components/Board/Board.tsx (created)
+- sticky-board/src/components/Board/Board.css (created)
+- sticky-board/src/App.tsx (modified)
+- sticky-board/src/App.css (modified)
+- sticky-board/src/App.test.tsx (modified)
+- sticky-board/src/setupTests.ts (modified)
+
+## Change Log
+
+- 2026-03-11: Story 1.3 implemented — Board layout, three-column grid, rough.js sketchy aesthetic, Caveat font, empty-state placeholders, Vite scaffold fully replaced

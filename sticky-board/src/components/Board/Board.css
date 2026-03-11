@@ -1,0 +1,23 @@
+.board {
+  position: relative;
+  max-width: var(--board-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-md);
+  min-height: 100vh;
+}
+
+.board-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.board-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-columns);
+  position: relative;
+  z-index: 1;
+  height: calc(100vh - var(--spacing-md) * 2);
+}
