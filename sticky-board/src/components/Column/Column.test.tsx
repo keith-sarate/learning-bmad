@@ -1,5 +1,19 @@
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import Column from './Column';
+
+vi.mock('../../context/BoardContext', () => ({
+  useBoardContext: () => ({
+    dispatch: vi.fn(),
+    boardState: {
+      cards: {},
+      columns: { todo: [], inProgress: [], done: [] },
+      isDragging: false,
+      activeDragCardId: null,
+    },
+    storageError: null,
+  }),
+}));
 
 describe('Column', () => {
   it('renders column heading with given title', () => {
@@ -7,17 +21,17 @@ describe('Column', () => {
     expect(screen.getByRole('heading', { name: 'To Do' })).toBeInTheDocument();
   });
 
-  it('shows empty state text when no children', () => {
-    render(<Column id="todo" title="To Do" emptyStateText="Your tasks go here" />);
-    expect(screen.getByText('Your tasks go here')).toBeInTheDocument();
+  it('shows empty state text for non-todo column when no cards', () => {
+    render(<Column id="inProgress" title="In Progress" emptyStateText="Drag cards here to start" />);
+    expect(screen.getByText('Drag cards here to start')).toBeInTheDocument();
   });
 
   it('hides empty state when children are provided', () => {
     render(
-      <Column id="todo" title="To Do" emptyStateText="Your tasks go here">
+      <Column id="inProgress" title="In Progress" emptyStateText="Drag cards here to start">
         <div>A card</div>
       </Column>
     );
-    expect(screen.queryByText('Your tasks go here')).not.toBeInTheDocument();
+    expect(screen.queryByText('Drag cards here to start')).not.toBeInTheDocument();
   });
 });

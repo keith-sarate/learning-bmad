@@ -1,0 +1,16 @@
+.card {
+  border-radius: var(--border-radius-card);
+  box-shadow: 0 2px 4px var(--color-card-shadow);
+  padding: var(--spacing-md);
+  min-height: var(--card-min-height);
+  cursor: pointer;
+  font-family: var(--font-handwritten);
+}
+
+.card-title {
+  font-size: var(--font-size-card-title);
+  color: var(--color-text-primary);
+  margin: 0;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-card);
+}

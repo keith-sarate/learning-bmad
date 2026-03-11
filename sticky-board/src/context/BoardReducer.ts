@@ -1,4 +1,4 @@
-import type { BoardState, BoardAction, ColumnId } from '../types/types';
+import type { BoardState, BoardAction } from '../types/types';
 
 export const initialBoardState: BoardState = {
   cards: {},

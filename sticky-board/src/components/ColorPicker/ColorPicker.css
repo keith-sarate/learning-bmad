@@ -1,0 +1,20 @@
+.color-picker {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  padding: var(--spacing-sm);
+}
+
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition-default);
+}
+
+.color-swatch:hover {
+  border-color: var(--color-column-border);
+  transform: scale(1.15);
+}

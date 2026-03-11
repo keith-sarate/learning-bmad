@@ -1,16 +1,19 @@
 import { useRef, useEffect, useCallback } from 'react';
 import rough from 'roughjs';
-import type { ColumnId } from '../../types/types';
+import type { ColumnId, Card } from '../../types/types';
+import CardComponent from '../Card/Card';
+import CardCreationPad from '../CardCreationPad/CardCreationPad';
 import './Column.css';
 
 interface ColumnProps {
   id: ColumnId;
   title: string;
   emptyStateText: string;
+  cards?: Card[];
   children?: React.ReactNode;
 }
 
-function Column({ id, title, emptyStateText, children }: ColumnProps) {
+function Column({ id, title, emptyStateText, cards, children }: ColumnProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -52,7 +55,9 @@ function Column({ id, title, emptyStateText, children }: ColumnProps) {
     return () => observer.disconnect();
   }, [drawSketchyBorder]);
 
-  const hasChildren = !!children;
+  const hasCards = (cards ?? []).length > 0;
+  const isTodo = id === 'todo';
+  const showEmptyState = !isTodo && !hasCards && !children;
 
   return (
     <div className="column" ref={containerRef} data-column-id={id}>
@@ -64,8 +69,12 @@ function Column({ id, title, emptyStateText, children }: ColumnProps) {
       <div className="column-inner">
         <h2 className="column-header">{title}</h2>
         <div className="column-cards">
+          {isTodo && <CardCreationPad />}
+          {(cards ?? []).map((card) => (
+            <CardComponent key={card.id} card={card} />
+          ))}
           {children}
-          {!hasChildren && (
+          {showEmptyState && (
             <div className="column-empty-state">{emptyStateText}</div>
           )}
         </div>

@@ -1,0 +1,72 @@
+.creation-pad-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.creation-pad {
+  position: relative;
+  overflow: hidden;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  background-color: var(--color-card-yellow);
+  border-radius: var(--border-radius-card);
+  box-shadow: 0 2px 4px var(--color-card-shadow);
+  font-family: var(--font-handwritten);
+  flex-shrink: 0;
+}
+
+.creation-pad::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent var(--color-board-background) transparent transparent;
+  transition: border-width var(--transition-default);
+}
+
+.creation-pad:hover::after {
+  border-width: 0 28px 28px 0;
+}
+
+.add-card-button {
+  font-family: var(--font-handwritten);
+  cursor: pointer;
+  background: none;
+  border: 2px dashed var(--color-text-empty-state);
+  border-radius: var(--border-radius-card);
+  color: var(--color-text-empty-state);
+  font-size: 1.25rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  transition: var(--transition-default);
+}
+
+.add-card-button:hover {
+  border-color: var(--color-column-border);
+  color: var(--color-column-border);
+}
+
+.card-creation-form {
+  border-radius: var(--border-radius-card);
+  box-shadow: 0 2px 4px var(--color-card-shadow);
+  padding: var(--spacing-md);
+  min-height: var(--card-min-height);
+}
+
+.card-creation-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-handwritten);
+  font-size: var(--font-size-card-title);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  box-sizing: border-box;
+}

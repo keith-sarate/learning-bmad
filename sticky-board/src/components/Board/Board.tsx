@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import rough from 'roughjs';
-import type { ColumnConfig } from '../../types/types';
+import type { ColumnConfig, Card } from '../../types/types';
+import { useBoardContext } from '../../context/BoardContext';
 import Column from '../Column/Column';
 import './Board.css';
 
@@ -13,6 +14,7 @@ const COLUMNS: ColumnConfig[] = [
 function Board() {
   const containerRef = useRef<HTMLDivElement>(null);
   const boardSvgRef = useRef<SVGSVGElement>(null);
+  const { boardState } = useBoardContext();
 
   const drawBoardBackground = useCallback(() => {
     const container = containerRef.current;
@@ -60,14 +62,20 @@ function Board() {
         aria-hidden="true"
       />
       <div className="board-columns">
-        {COLUMNS.map((col) => (
-          <Column
-            key={col.id}
-            id={col.id}
-            title={col.title}
-            emptyStateText={col.emptyStateText}
-          />
-        ))}
+        {COLUMNS.map((col) => {
+          const columnCards = boardState.columns[col.id]
+            .map(id => boardState.cards[id])
+            .filter((c): c is Card => Boolean(c));
+          return (
+            <Column
+              key={col.id}
+              id={col.id}
+              title={col.title}
+              emptyStateText={col.emptyStateText}
+              cards={columnCards}
+            />
+          );
+        })}
       </div>
     </div>
   );
