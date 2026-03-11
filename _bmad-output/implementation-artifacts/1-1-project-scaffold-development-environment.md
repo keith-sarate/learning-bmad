@@ -1,6 +1,6 @@
 # Story 1.1: Project Scaffold & Development Environment
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -41,7 +41,7 @@ So that the team has a consistent, runnable local development environment ready 
   - [x] Create a smoke test `src/App.test.tsx` that renders `<App />` and verifies it mounts without error
   - [x] Run `npm run test` and verify it executes without configuration errors
 - [x] Task 4 — Configure TypeScript strict mode (AC: #3)
-  - [x] Open `tsconfig.json` and ensure `"strict": true` is set in `compilerOptions`
+  - [x] Open `tsconfig.app.json` and ensure `"strict": true` is set in `compilerOptions`
   - [x] Run `npm run build` and resolve any TypeScript strict-mode errors from the scaffold default files
   - [x] Confirm `dist/` folder is generated successfully
 - [x] Task 5 — Create mandatory project directory structure (AC: #4)
@@ -89,7 +89,7 @@ sticky-board/                           # Project root created by Vite scaffold
 ├── tsconfig.node.json
 ├── vite.config.ts                      # Must include Vitest config block
 ├── index.html                          # Entry HTML — Story 1.2 will add Google Fonts link
-├── .eslintrc.cjs
+├── eslint.config.js
 ├── .gitignore
 ├── public/
 │   └── (empty — drop-sound.mp3 added in Epic 3)
@@ -136,7 +136,7 @@ Install type declarations if Vitest globals are used: add `"types": ["vitest/glo
 
 ### Bundle Size Context
 
-- Story 1.1 scaffold with all approved dependencies should produce a gzipped bundle of approximately 80–120KB — well under the 400KB limit (NFR4)
+- Story 1.1 scaffold with all approved dependencies produces a gzipped bundle of approximately 61KB — well under the 400KB limit (NFR4)
 - The rough.js library (largest external dep at ~50KB minified) is the main contributor
 - dnd-kit is tree-shakeable; only used pieces will be bundled once feature implementation begins
 
@@ -219,7 +219,14 @@ Claude Sonnet 4.6
 - sticky-board/src/types/.gitkeep
 - sticky-board/src/styles/.gitkeep
 - sticky-board/src/assets/.gitkeep
+- sticky-board/.gitignore
+- sticky-board/README.md
+- sticky-board/eslint.config.js
+- sticky-board/package-lock.json
+- sticky-board/public/vite.svg
+- sticky-board/src/assets/react.svg
 
 ## Change Log
 
 - 2026-03-11: Initial implementation — scaffolded `sticky-board/` with Vite 7 + React 19 + TypeScript 5, installed all approved runtime and dev dependencies, configured Vitest 4 with jsdom environment and globals, created smoke test, verified all 6 ACs including bundle size (~60.8KB gzipped, limit 400KB). Story marked ready for review.
+- 2026-03-11: Code review fixes — H1: committed all untracked `sticky-board/` files to git; H2/M3/M4: completed File List with 6 missing scaffold files (`.gitignore`, `README.md`, `eslint.config.js`, `package-lock.json`, `public/vite.svg`, `src/assets/react.svg`); M1: corrected `.eslintrc.cjs` → `eslint.config.js` in Dev Notes project structure; M2: corrected Task 4 to reference `tsconfig.app.json`; L1: removed redundant vitest imports from `App.test.tsx`; L2: added assertion to smoke test; L3: corrected bundle size estimate to ~61KB. Story marked done.

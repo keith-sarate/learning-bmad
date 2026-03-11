@@ -41,7 +41,7 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   epic-1: in-progress
-  1-1-project-scaffold-development-environment: review
+  1-1-project-scaffold-development-environment: done
   1-2-design-token-system-global-stylesheet: backlog
   1-3-board-layout-three-columns-sketchy-visual-aesthetic: backlog
   epic-1-retrospective: optional
