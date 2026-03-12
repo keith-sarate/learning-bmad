@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import ColorPicker from './ColorPicker';
@@ -39,5 +39,45 @@ describe('ColorPicker', () => {
 
     expect(onColorSelect).toHaveBeenCalledWith('purple');
     expect(onColorSelect).toHaveBeenCalledTimes(1);
+  });
+
+  it('ArrowRight moves focus from yellow swatch to pink swatch', () => {
+    const onColorSelect = vi.fn();
+    render(<ColorPicker onColorSelect={onColorSelect} />);
+    const yellowSwatch = screen.getByLabelText('Create yellow card');
+    const pinkSwatch = screen.getByLabelText('Create pink card');
+    yellowSwatch.focus();
+    fireEvent.keyDown(yellowSwatch, { key: 'ArrowRight' });
+    expect(document.activeElement).toBe(pinkSwatch);
+  });
+
+  it('ArrowLeft from yellow swatch (index 0) wraps to purple swatch (index 5)', () => {
+    const onColorSelect = vi.fn();
+    render(<ColorPicker onColorSelect={onColorSelect} />);
+    const yellowSwatch = screen.getByLabelText('Create yellow card');
+    const purpleSwatch = screen.getByLabelText('Create purple card');
+    yellowSwatch.focus();
+    fireEvent.keyDown(yellowSwatch, { key: 'ArrowLeft' });
+    expect(document.activeElement).toBe(purpleSwatch);
+  });
+
+  it('ArrowDown moves focus from yellow swatch to pink swatch', () => {
+    const onColorSelect = vi.fn();
+    render(<ColorPicker onColorSelect={onColorSelect} />);
+    const yellowSwatch = screen.getByLabelText('Create yellow card');
+    const pinkSwatch = screen.getByLabelText('Create pink card');
+    yellowSwatch.focus();
+    fireEvent.keyDown(yellowSwatch, { key: 'ArrowDown' });
+    expect(document.activeElement).toBe(pinkSwatch);
+  });
+
+  it('ArrowUp from yellow swatch (index 0) wraps to purple swatch (index 5)', () => {
+    const onColorSelect = vi.fn();
+    render(<ColorPicker onColorSelect={onColorSelect} />);
+    const yellowSwatch = screen.getByLabelText('Create yellow card');
+    const purpleSwatch = screen.getByLabelText('Create purple card');
+    yellowSwatch.focus();
+    fireEvent.keyDown(yellowSwatch, { key: 'ArrowUp' });
+    expect(document.activeElement).toBe(purpleSwatch);
   });
 });

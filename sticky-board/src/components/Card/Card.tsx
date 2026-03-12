@@ -51,6 +51,14 @@ function Card({ card, isDone }: CardProps) {
     }
   }, [editingField]); // intentionally omit card.title/description — only run on field switch
 
+  function handleCardKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (editingField !== null) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleTitleClick();
+    }
+  }
+
   function handleTitleClick() {
     if (editingField) return;
     originalValueRef.current = card.title;
@@ -110,6 +118,7 @@ function Card({ card, isDone }: CardProps) {
       data-card-id={card.id}
       {...attributes}
       {...(editingField === null ? listeners : {})}
+      onKeyDown={handleCardKeyDown}
     >
       <p
         ref={titleRef}

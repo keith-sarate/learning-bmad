@@ -126,4 +126,15 @@ describe('CardCreationPad', () => {
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     );
   });
+
+  it('pressing Space on the creation pad shows the ColorPicker', async () => {
+    const user = userEvent.setup();
+    render(<CardCreationPad />);
+
+    const pad = screen.getByRole('button', { name: 'Create a new card' });
+    pad.focus();
+    await user.keyboard(' ');
+
+    expect(screen.getByRole('menu', { name: 'Choose card color' })).toBeInTheDocument();
+  });
 });

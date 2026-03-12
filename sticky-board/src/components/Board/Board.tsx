@@ -163,7 +163,7 @@ function Board() {
   }
 
   return (
-    <div className="board" ref={containerRef}>
+    <div className="board" ref={containerRef} role="main">
       <svg
         className="board-canvas"
         ref={boardSvgRef}

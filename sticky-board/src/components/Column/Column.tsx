@@ -67,7 +67,7 @@ function Column({ id, title, emptyStateText, cards, children, isHighlighted }: C
   const showEmptyState = !isTodo && !hasCards && !children;
 
   return (
-    <div className={`column${isHighlighted ? ' column-highlighted' : ''}`} ref={containerRef} data-column-id={id}>
+    <div className={`column${isHighlighted ? ' column-highlighted' : ''}`} ref={containerRef} data-column-id={id} role="region" aria-label={title}>
       <svg
         className="column-border-canvas"
         ref={svgRef}

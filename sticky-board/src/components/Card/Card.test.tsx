@@ -136,4 +136,45 @@ describe('Card', () => {
     fireEvent.click(desc);
     expect(desc).toHaveAttribute('contenteditable', 'true');
   });
+
+  it('pressing Enter on focused card (not editing) activates title edit mode', () => {
+    const { container } = render(<Card card={mockCard} />);
+    const cardDiv = container.querySelector('.card')!;
+    fireEvent.keyDown(cardDiv, { key: 'Enter' });
+    const title = container.querySelector('.card-title')!;
+    expect(title).toHaveAttribute('contenteditable', 'true');
+  });
+
+  it('pressing Space on focused card (not editing) activates title edit mode', () => {
+    const { container } = render(<Card card={mockCard} />);
+    const cardDiv = container.querySelector('.card')!;
+    fireEvent.keyDown(cardDiv, { key: ' ' });
+    const title = container.querySelector('.card-title')!;
+    expect(title).toHaveAttribute('contenteditable', 'true');
+  });
+
+  it('pressing Enter on card when already editing does not reset edit mode', () => {
+    const { container } = render(<Card card={mockCard} />);
+    const title = container.querySelector('.card-title')!;
+    // Enter edit mode via click
+    fireEvent.click(title);
+    expect(title).toHaveAttribute('contenteditable', 'true');
+    // Pressing Enter on card root while editing should not interfere
+    const cardDiv = container.querySelector('.card')!;
+    fireEvent.keyDown(cardDiv, { key: 'Enter' });
+    // Still in edit mode (inner Enter handler on title manages commit)
+    expect(title).toHaveAttribute('contenteditable', 'true');
+  });
+
+  it('pressing Escape during title edit restores original value and exits edit mode', () => {
+    const { container } = render(<Card card={mockCard} />);
+    const title = container.querySelector('.card-title')!;
+    fireEvent.click(title);
+    // Simulate editing
+    fireEvent.keyDown(title, { key: 'Escape' });
+    fireEvent.blur(title);
+    // After Escape: no dispatch, edit mode exited
+    expect(mockDispatch).not.toHaveBeenCalled();
+    expect(title).not.toHaveAttribute('contenteditable', 'true');
+  });
 });

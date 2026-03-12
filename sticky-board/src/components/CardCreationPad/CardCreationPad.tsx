@@ -93,7 +93,12 @@ function CardCreationPad() {
         role="button"
         tabIndex={0}
         aria-label="Create a new card"
-        onKeyDown={(e) => e.key === 'Enter' && handlePadClick()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handlePadClick();
+          }
+        }}
       />
       <button
         className="add-card-button"
