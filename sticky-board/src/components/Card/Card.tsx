@@ -27,13 +27,6 @@ function Card({ card, isDone }: CardProps) {
     isDragging,
   } = useSortable({ id: card.id });
 
-  const dragStyle: React.CSSProperties = {
-    transform: isDragging
-      ? `${CSS.Transform.toString(transform)} rotate(var(--card-drag-tilt-angle))`
-      : CSS.Transform.toString(transform),
-    transition,
-  };
-
   useEffect(() => {
     if (editingField === 'title' && titleRef.current) {
       titleRef.current.textContent = card.title;
@@ -107,13 +100,27 @@ function Card({ card, isDone }: CardProps) {
   const isEditingTitle = editingField === 'title';
   const isEditingDesc = editingField === 'description';
 
+  // While dragging, render an invisible ghost so dnd-kit keeps spatial info
+  // but the user only sees the DragOverlay clone following the cursor.
+  if (isDragging) {
+    return (
+      <div
+        ref={setNodeRef}
+        className="card card-ghost"
+        style={{ backgroundColor: `var(--color-card-${card.color})` }}
+        {...attributes}
+      />
+    );
+  }
+
   return (
     <div
       ref={setNodeRef}
-      className={`card${isDone ? ' is-done' : ''}${isDragging ? ' is-dragging' : ''}`}
+      className={`card${isDone ? ' is-done' : ''}`}
       style={{
         backgroundColor: `var(--color-card-${card.color})`,
-        ...dragStyle,
+        transform: CSS.Transform.toString(transform),
+        transition,
       }}
       data-card-id={card.id}
       {...attributes}

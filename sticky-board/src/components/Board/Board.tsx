@@ -2,12 +2,15 @@ import { useRef, useEffect, useCallback, useState } from 'react';
 import rough from 'roughjs';
 import {
   DndContext,
+  DragOverlay,
   PointerSensor,
   useSensor,
   useSensors,
-  closestCorners,
+  pointerWithin,
+  rectIntersection,
+  closestCenter,
 } from '@dnd-kit/core';
-import type { DragStartEvent, DragEndEvent, DragOverEvent } from '@dnd-kit/core';
+import type { DragStartEvent, DragEndEvent, DragOverEvent, CollisionDetection } from '@dnd-kit/core';
 import type { ColumnConfig, Card, ColumnId } from '../../types/types';
 import { useBoardContext } from '../../context/BoardContext';
 import Column from '../Column/Column';
@@ -22,11 +25,32 @@ const COLUMNS: ColumnConfig[] = [
   { id: 'done',       title: 'Done',        emptyStateText: 'Completed tasks land here' },
 ];
 
+const COLUMN_IDS: ColumnId[] = ['todo', 'inProgress', 'done'];
+
+// Custom collision detection: pointer-within first (most accurate for columns),
+// then rect intersection, then closest center as final fallback.
+const collisionDetection: CollisionDetection = (args) => {
+  // If pointer is directly inside a droppable, that wins immediately
+  const pointerCollisions = pointerWithin(args);
+  if (pointerCollisions.length > 0) {
+    // Prefer column or trash hits over card hits so the column is always the target
+    const containerHit = pointerCollisions.find(
+      ({ id }) => COLUMN_IDS.includes(id as ColumnId) || id === 'trash'
+    );
+    if (containerHit) return [containerHit];
+    return pointerCollisions;
+  }
+  // Fall back to rect intersection (handles slow/edge cursor movement)
+  const intersecting = rectIntersection(args);
+  return intersecting.length > 0 ? intersecting : closestCenter(args);
+};
+
 function Board() {
   const containerRef = useRef<HTMLDivElement>(null);
   const boardSvgRef = useRef<SVGSVGElement>(null);
   const { boardState, dispatch } = useBoardContext();
   const [activeOverColumnId, setActiveOverColumnId] = useState<ColumnId | null>(null);
+  const [activeCard, setActiveCard] = useState<Card | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -73,7 +97,9 @@ function Board() {
   }, [drawBoardBackground]);
 
   function handleDragStart(event: DragStartEvent) {
-    dispatch({ type: 'SET_DRAGGING', payload: { cardId: event.active.id as string } });
+    const cardId = event.active.id as string;
+    dispatch({ type: 'SET_DRAGGING', payload: { cardId } });
+    setActiveCard(boardState.cards[cardId] ?? null);
   }
 
   function handleDragOver(event: DragOverEvent) {
@@ -83,12 +109,11 @@ function Board() {
       return;
     }
     const overId = over.id as string;
-    const columnIds: ColumnId[] = ['todo', 'inProgress', 'done'];
-    if (columnIds.includes(overId as ColumnId)) {
+    if (COLUMN_IDS.includes(overId as ColumnId)) {
       setActiveOverColumnId(overId as ColumnId);
     } else {
       // over.id is a card ID — find which column that card belongs to
-      const col = columnIds.find((c) => boardState.columns[c].includes(overId));
+      const col = COLUMN_IDS.find((c) => boardState.columns[c].includes(overId));
       setActiveOverColumnId(col ?? null);
     }
   }
@@ -99,6 +124,7 @@ function Board() {
     // ALWAYS clear dragging first — even on cancelled drag (no over target)
     dispatch({ type: 'CLEAR_DRAGGING' });
     setActiveOverColumnId(null);
+    setActiveCard(null);
 
     if (!over) return; // drag cancelled — card returns to original position
 
@@ -113,7 +139,7 @@ function Board() {
       return;
     }
 
-    const columnIds: ColumnId[] = ['todo', 'inProgress', 'done'];
+    const columnIds = COLUMN_IDS;
 
     // Determine source column
     const fromColumn = columnIds.find((col) =>
@@ -171,7 +197,7 @@ function Board() {
       />
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCorners}
+        collisionDetection={collisionDetection}
         onDragStart={handleDragStart}
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
@@ -194,6 +220,23 @@ function Board() {
           })}
         </div>
         <TrashZone />
+        <DragOverlay dropAnimation={null}>
+          {activeCard ? (
+            <div
+              className="card is-dragging"
+              style={{
+                backgroundColor: `var(--color-card-${activeCard.color})`,
+                transform: 'rotate(var(--card-drag-tilt-angle))',
+                boxShadow: '0 8px 24px var(--color-card-shadow)',
+              }}
+            >
+              <p className="card-title">{activeCard.title}</p>
+              {activeCard.description && (
+                <p className="card-description">{activeCard.description}</p>
+              )}
+            </div>
+          ) : null}
+        </DragOverlay>
       </DndContext>
       <StorageNotice />
     </div>

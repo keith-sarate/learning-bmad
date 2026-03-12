@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, type MutableRefObject } from 'react';
 import rough from 'roughjs';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
@@ -21,6 +21,11 @@ function Column({ id, title, emptyStateText, cards, children, isHighlighted }: C
   const svgRef = useRef<SVGSVGElement>(null);
 
   const { setNodeRef: setDroppableRef } = useDroppable({ id });
+
+  const setColumnRef = useCallback((node: HTMLDivElement | null) => {
+    (containerRef as MutableRefObject<HTMLDivElement | null>).current = node;
+    setDroppableRef(node);
+  }, [setDroppableRef]);
 
   const cardIds = (cards ?? []).map((c) => c.id);
 
@@ -67,7 +72,7 @@ function Column({ id, title, emptyStateText, cards, children, isHighlighted }: C
   const showEmptyState = !isTodo && !hasCards && !children;
 
   return (
-    <div className={`column${isHighlighted ? ' column-highlighted' : ''}`} ref={containerRef} data-column-id={id} role="region" aria-label={title}>
+    <div className={`column${isHighlighted ? ' column-highlighted' : ''}`} ref={setColumnRef} data-column-id={id} role="region" aria-label={title}>
       <svg
         className="column-border-canvas"
         ref={svgRef}
@@ -75,7 +80,7 @@ function Column({ id, title, emptyStateText, cards, children, isHighlighted }: C
       />
       <div className="column-inner">
         <h2 className="column-header">{title}</h2>
-        <div className="column-cards" ref={setDroppableRef}>
+        <div className="column-cards">
           {isTodo && <CardCreationPad />}
           <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
             {(cards ?? []).map((card) => (
