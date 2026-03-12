@@ -11,6 +11,7 @@ import type { DragStartEvent, DragEndEvent, DragOverEvent } from '@dnd-kit/core'
 import type { ColumnConfig, Card, ColumnId } from '../../types/types';
 import { useBoardContext } from '../../context/BoardContext';
 import Column from '../Column/Column';
+import { audioService } from '../../services/audioService';
 import TrashZone from '../TrashZone/TrashZone';
 import './Board.css';
 
@@ -130,6 +131,7 @@ function Board() {
         type: 'MOVE_CARD',
         payload: { cardId: activeId, fromColumn, toColumn, toIndex },
       });
+      audioService.playDrop(); // ← valid column drop
     } else {
       // over.id is a card ID — find which column the target card is in
       const toColumn = columnIds.find((col) =>
@@ -147,12 +149,14 @@ function Board() {
           type: 'REORDER_CARD',
           payload: { columnId: fromColumn, fromIndex, toIndex },
         });
+        audioService.playDrop(); // ← within-column reorder
       } else {
         // Cross-column move — insert before the card being hovered over
         dispatch({
           type: 'MOVE_CARD',
           payload: { cardId: activeId, fromColumn, toColumn, toIndex },
         });
+        audioService.playDrop(); // ← cross-column move
       }
     }
   }

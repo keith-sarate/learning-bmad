@@ -57,7 +57,7 @@ development_status:
   3-1-core-drag-drop-cross-column-and-within-column: review
   3-2-drag-visual-feedback-animations: review
   3-3-card-deletion-via-trash-zone: review
-  3-4-drop-sound-done-column-visual-state: backlog
+  3-4-drop-sound-done-column-visual-state: review
   epic-3-retrospective: optional
 
   epic-4: backlog

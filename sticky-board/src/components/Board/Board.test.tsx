@@ -26,6 +26,10 @@ vi.mock('../CardCreationPad/CardCreationPad', () => ({
 
 vi.mock('../TrashZone/TrashZone', () => ({ default: () => <div data-testid="trash-zone-mock" /> }));
 
+vi.mock('../../services/audioService', () => ({
+  audioService: { playDrop: vi.fn() },
+}));
+
 import Board from './Board';
 
 describe('Board', () => {
