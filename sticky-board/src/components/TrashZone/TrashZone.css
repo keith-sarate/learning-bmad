@@ -29,3 +29,9 @@
 .trash-zone-label {
   font-weight: var(--font-weight-bold);
 }
+
+.trash-zone.is-active {
+  background-color: rgba(232, 88, 74, 0.12);
+  border-color: var(--color-trash-active);
+  color: var(--color-trash-active);
+}

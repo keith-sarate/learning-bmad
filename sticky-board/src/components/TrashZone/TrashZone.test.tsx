@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 
 let mockIsDragging = false;
+let mockIsOver = false;
+
+vi.mock('@dnd-kit/core', () => ({
+  useDroppable: () => ({ setNodeRef: vi.fn(), isOver: mockIsOver }),
+}));
 
 vi.mock('../../context/BoardContext', () => ({
   useBoardContext: () => ({
@@ -21,6 +26,7 @@ import TrashZone from './TrashZone';
 describe('TrashZone', () => {
   afterEach(() => {
     mockIsDragging = false;
+    mockIsOver = false;
   });
 
   it('does NOT render when isDragging is false', () => {
@@ -41,5 +47,21 @@ describe('TrashZone', () => {
     render(<TrashZone />);
     const zone = screen.getByRole('region', { name: 'Drop here to delete card' });
     expect(zone).toHaveAttribute('aria-label', 'Drop here to delete card');
+  });
+
+  it('applies .is-active class when isOver is true', () => {
+    mockIsDragging = true;
+    mockIsOver = true;
+    render(<TrashZone />);
+    const zone = screen.getByRole('region', { name: 'Drop here to delete card' });
+    expect(zone).toHaveClass('is-active');
+  });
+
+  it('does NOT apply .is-active class when isOver is false', () => {
+    mockIsDragging = true;
+    mockIsOver = false;
+    render(<TrashZone />);
+    const zone = screen.getByRole('region', { name: 'Drop here to delete card' });
+    expect(zone).not.toHaveClass('is-active');
   });
 });

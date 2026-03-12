@@ -105,6 +105,12 @@ function Board() {
 
     if (activeId === overId) return; // dropped on itself — no change
 
+    // Trash zone — delete card (no audio, per architecture communication patterns)
+    if (overId === 'trash') {
+      dispatch({ type: 'DELETE_CARD', payload: { cardId: activeId } });
+      return;
+    }
+
     const columnIds: ColumnId[] = ['todo', 'inProgress', 'done'];
 
     // Determine source column
