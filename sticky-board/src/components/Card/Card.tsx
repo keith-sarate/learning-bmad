@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { Card as CardType } from '../../types/types';
 import { useBoardContext } from '../../context/BoardContext';
 import './Card.css';
@@ -15,6 +17,19 @@ function Card({ card, isDone }: CardProps) {
   const isEscapedRef = useRef(false);
   const titleRef = useRef<HTMLParagraphElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: card.id });
+
+  const dragStyle: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   useEffect(() => {
     if (editingField === 'title' && titleRef.current) {
@@ -83,9 +98,15 @@ function Card({ card, isDone }: CardProps) {
 
   return (
     <div
+      ref={setNodeRef}
       className={`card${isDone ? ' is-done' : ''}`}
-      style={{ backgroundColor: `var(--color-card-${card.color})` }}
+      style={{
+        backgroundColor: `var(--color-card-${card.color})`,
+        ...dragStyle,
+      }}
       data-card-id={card.id}
+      {...attributes}
+      {...(editingField === null ? listeners : {})}
     >
       <p
         ref={titleRef}

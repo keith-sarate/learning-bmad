@@ -2,6 +2,14 @@ import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import Column from './Column';
 
+vi.mock('@dnd-kit/sortable', () => ({
+  SortableContext: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  verticalListSortingStrategy: {},
+}));
+vi.mock('@dnd-kit/core', () => ({
+  useDroppable: () => ({ setNodeRef: vi.fn() }),
+}));
+
 vi.mock('../../context/BoardContext', () => ({
   useBoardContext: () => ({
     dispatch: vi.fn(),

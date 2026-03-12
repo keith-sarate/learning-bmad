@@ -2,6 +2,21 @@ import { vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import Card from './Card';
 
+vi.mock('@dnd-kit/sortable', () => ({
+  useSortable: () => ({
+    attributes: {},
+    listeners: {},
+    setNodeRef: vi.fn(),
+    transform: null,
+    transition: undefined,
+  }),
+}));
+vi.mock('@dnd-kit/utilities', () => ({
+  CSS: {
+    Transform: { toString: () => '' },
+  },
+}));
+
 const mockDispatch = vi.fn();
 
 vi.mock('../../context/BoardContext', () => ({

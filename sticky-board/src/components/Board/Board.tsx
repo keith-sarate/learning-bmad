@@ -1,6 +1,14 @@
 import { useRef, useEffect, useCallback } from 'react';
 import rough from 'roughjs';
-import type { ColumnConfig, Card } from '../../types/types';
+import {
+  DndContext,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  closestCorners,
+} from '@dnd-kit/core';
+import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core';
+import type { ColumnConfig, Card, ColumnId } from '../../types/types';
 import { useBoardContext } from '../../context/BoardContext';
 import Column from '../Column/Column';
 import './Board.css';
@@ -14,7 +22,13 @@ const COLUMNS: ColumnConfig[] = [
 function Board() {
   const containerRef = useRef<HTMLDivElement>(null);
   const boardSvgRef = useRef<SVGSVGElement>(null);
-  const { boardState } = useBoardContext();
+  const { boardState, dispatch } = useBoardContext();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    })
+  );
 
   const drawBoardBackground = useCallback(() => {
     const container = containerRef.current;
@@ -54,6 +68,73 @@ function Board() {
     return () => observer.disconnect();
   }, [drawBoardBackground]);
 
+  function handleDragStart(event: DragStartEvent) {
+    dispatch({ type: 'SET_DRAGGING', payload: { cardId: event.active.id as string } });
+  }
+
+  function handleDragOver(_event: DragEndEvent) {
+    // Column highlight visual feedback is handled in Story 3.2
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    // ALWAYS clear dragging first — even on cancelled drag (no over target)
+    dispatch({ type: 'CLEAR_DRAGGING' });
+
+    if (!over) return; // drag cancelled — card returns to original position
+
+    const activeId = active.id as string;
+    const overId = over.id as string;
+
+    if (activeId === overId) return; // dropped on itself — no change
+
+    const columnIds: ColumnId[] = ['todo', 'inProgress', 'done'];
+
+    // Determine source column
+    const fromColumn = columnIds.find((col) =>
+      boardState.columns[col].includes(activeId)
+    );
+    if (!fromColumn) return;
+
+    // Is the drop target a column (e.g. empty column droppable)?
+    const isOverColumn = columnIds.includes(overId as ColumnId);
+
+    if (isOverColumn) {
+      const toColumn = overId as ColumnId;
+      if (fromColumn === toColumn) return; // hovering over own column — no change
+      const toIndex = boardState.columns[toColumn].length; // append at end of target column
+      dispatch({
+        type: 'MOVE_CARD',
+        payload: { cardId: activeId, fromColumn, toColumn, toIndex },
+      });
+    } else {
+      // over.id is a card ID — find which column the target card is in
+      const toColumn = columnIds.find((col) =>
+        boardState.columns[col].includes(overId)
+      );
+      if (!toColumn) return;
+
+      const toIndex = boardState.columns[toColumn].indexOf(overId);
+
+      if (fromColumn === toColumn) {
+        // Within-column reorder
+        const fromIndex = boardState.columns[fromColumn].indexOf(activeId);
+        if (fromIndex === toIndex) return; // same slot — no change
+        dispatch({
+          type: 'REORDER_CARD',
+          payload: { columnId: fromColumn, fromIndex, toIndex },
+        });
+      } else {
+        // Cross-column move — insert before the card being hovered over
+        dispatch({
+          type: 'MOVE_CARD',
+          payload: { cardId: activeId, fromColumn, toColumn, toIndex },
+        });
+      }
+    }
+  }
+
   return (
     <div className="board" ref={containerRef}>
       <svg
@@ -61,22 +142,30 @@ function Board() {
         ref={boardSvgRef}
         aria-hidden="true"
       />
-      <div className="board-columns">
-        {COLUMNS.map((col) => {
-          const columnCards = boardState.columns[col.id]
-            .map(id => boardState.cards[id])
-            .filter((c): c is Card => Boolean(c));
-          return (
-            <Column
-              key={col.id}
-              id={col.id}
-              title={col.title}
-              emptyStateText={col.emptyStateText}
-              cards={columnCards}
-            />
-          );
-        })}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="board-columns">
+          {COLUMNS.map((col) => {
+            const columnCards = boardState.columns[col.id]
+              .map(id => boardState.cards[id])
+              .filter((c): c is Card => Boolean(c));
+            return (
+              <Column
+                key={col.id}
+                id={col.id}
+                title={col.title}
+                emptyStateText={col.emptyStateText}
+                cards={columnCards}
+              />
+            );
+          })}
+        </div>
+      </DndContext>
     </div>
   );
 }

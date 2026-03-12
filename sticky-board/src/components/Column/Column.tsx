@@ -1,5 +1,7 @@
 import { useRef, useEffect, useCallback } from 'react';
 import rough from 'roughjs';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useDroppable } from '@dnd-kit/core';
 import type { ColumnId, Card } from '../../types/types';
 import CardComponent from '../Card/Card';
 import CardCreationPad from '../CardCreationPad/CardCreationPad';
@@ -16,6 +18,10 @@ interface ColumnProps {
 function Column({ id, title, emptyStateText, cards, children }: ColumnProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  const { setNodeRef: setDroppableRef } = useDroppable({ id });
+
+  const cardIds = (cards ?? []).map((c) => c.id);
 
   const drawSketchyBorder = useCallback(() => {
     const container = containerRef.current;
@@ -68,11 +74,13 @@ function Column({ id, title, emptyStateText, cards, children }: ColumnProps) {
       />
       <div className="column-inner">
         <h2 className="column-header">{title}</h2>
-        <div className="column-cards">
+        <div className="column-cards" ref={setDroppableRef}>
           {isTodo && <CardCreationPad />}
-          {(cards ?? []).map((card) => (
-            <CardComponent key={card.id} card={card} isDone={id === 'done'} />
-          ))}
+          <SortableContext items={cardIds} strategy={verticalListSortingStrategy}>
+            {(cards ?? []).map((card) => (
+              <CardComponent key={card.id} card={card} isDone={id === 'done'} />
+            ))}
+          </SortableContext>
           {children}
           {showEmptyState && (
             <div className="column-empty-state">{emptyStateText}</div>
