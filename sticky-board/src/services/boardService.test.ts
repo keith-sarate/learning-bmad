@@ -106,6 +106,19 @@ describe('boardService.load()', () => {
     expect(result).toEqual({ ok: true, data: emptyBoardState });
     expect(warnSpy).toHaveBeenCalled();
   });
+
+  it('returns { ok: false, error: "UNAVAILABLE" } when localStorage.setItem throws a SecurityError (private browsing)', () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      const err = new DOMException('SecurityError', 'SecurityError');
+      throw err;
+    });
+
+    const result = boardService.load();
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).toBe('UNAVAILABLE');
+    }
+  });
 });
 
 describe('boardService.save()', () => {

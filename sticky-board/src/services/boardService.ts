@@ -32,7 +32,21 @@ function isValidBoardState(data: unknown): data is Pick<BoardState, 'cards' | 'c
   return Array.isArray(cols.todo) && Array.isArray(cols.inProgress) && Array.isArray(cols.done);
 }
 
-function load(): { ok: true; data: BoardState } {
+function isLocalStorageAvailable(): boolean {
+  try {
+    const testKey = '__sticky_board_test__';
+    localStorage.setItem(testKey, '1');
+    localStorage.removeItem(testKey);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function load(): { ok: true; data: BoardState } | { ok: false; error: StorageError } {
+  if (!isLocalStorageAvailable()) {
+    return { ok: false, error: 'UNAVAILABLE' };
+  }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw === null) return { ok: true, data: emptyBoardState };

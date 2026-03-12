@@ -4,11 +4,15 @@ import { boardService } from '../services/boardService';
 import type { BoardContextValue, StorageError } from '../types/types';
 
 export function useBoardState(): BoardContextValue {
-  const [boardState, dispatch] = useReducer(boardReducer, undefined, () => {
-    const result = boardService.load();
-    return result.data;
-  });
-  const [storageError, setStorageError] = useState<StorageError | null>(null);
+  const initialLoadResult = boardService.load();
+  const initialState: BoardState = initialLoadResult.ok
+    ? initialLoadResult.data
+    : { cards: {}, columns: { todo: [], inProgress: [], done: [] }, isDragging: false, activeDragCardId: null };
+
+  const [boardState, dispatch] = useReducer(boardReducer, initialState);
+  const [storageError, setStorageError] = useState<StorageError | null>(
+    initialLoadResult.ok ? null : initialLoadResult.error
+  );
 
   useEffect(() => {
     const result = boardService.save(boardState);

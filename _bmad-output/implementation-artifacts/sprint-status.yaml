@@ -60,7 +60,7 @@ development_status:
   3-4-drop-sound-done-column-visual-state: review
   epic-3-retrospective: optional
 
-  epic-4: backlog
-  4-1-storage-error-handling-and-recovery: backlog
+  epic-4: in-progress
+  4-1-storage-error-handling-and-recovery: review
   4-2-keyboard-navigation-accessibility: backlog
   epic-4-retrospective: optional

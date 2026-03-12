@@ -13,6 +13,7 @@ import { useBoardContext } from '../../context/BoardContext';
 import Column from '../Column/Column';
 import { audioService } from '../../services/audioService';
 import TrashZone from '../TrashZone/TrashZone';
+import StorageNotice from '../StorageNotice/StorageNotice';
 import './Board.css';
 
 const COLUMNS: ColumnConfig[] = [
@@ -194,6 +195,7 @@ function Board() {
         </div>
         <TrashZone />
       </DndContext>
+      <StorageNotice />
     </div>
   );
 }
