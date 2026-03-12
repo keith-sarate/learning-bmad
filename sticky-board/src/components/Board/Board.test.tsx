@@ -24,6 +24,8 @@ vi.mock('../CardCreationPad/CardCreationPad', () => ({
   default: () => <div data-testid="card-creation-pad" />,
 }));
 
+vi.mock('../TrashZone/TrashZone', () => ({ default: () => <div data-testid="trash-zone-mock" /> }));
+
 import Board from './Board';
 
 describe('Board', () => {

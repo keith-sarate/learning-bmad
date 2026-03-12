@@ -17,6 +17,7 @@
   --color-column-border: #8B7355;                 /* Warm brown — rendered via rough.js not CSS */
   --color-card-shadow: rgba(0, 0, 0, 0.15);       /* Physical depth, not garish */
   --color-done-overlay: rgba(255, 255, 255, 0.5); /* Done card fade overlay */
+  --color-column-highlight: rgba(139, 115, 85, 0.35); /* Warm brown tint for active drop-target column */
 
   /* =========================================
      Text Colors

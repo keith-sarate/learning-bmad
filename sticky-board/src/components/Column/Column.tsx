@@ -13,9 +13,10 @@ interface ColumnProps {
   emptyStateText: string;
   cards?: Card[];
   children?: React.ReactNode;
+  isHighlighted?: boolean;
 }
 
-function Column({ id, title, emptyStateText, cards, children }: ColumnProps) {
+function Column({ id, title, emptyStateText, cards, children, isHighlighted }: ColumnProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -66,7 +67,7 @@ function Column({ id, title, emptyStateText, cards, children }: ColumnProps) {
   const showEmptyState = !isTodo && !hasCards && !children;
 
   return (
-    <div className="column" ref={containerRef} data-column-id={id}>
+    <div className={`column${isHighlighted ? ' column-highlighted' : ''}`} ref={containerRef} data-column-id={id}>
       <svg
         className="column-border-canvas"
         ref={svgRef}

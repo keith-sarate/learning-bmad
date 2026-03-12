@@ -24,10 +24,13 @@ function Card({ card, isDone }: CardProps) {
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id: card.id });
 
   const dragStyle: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
+    transform: isDragging
+      ? `${CSS.Transform.toString(transform)} rotate(var(--card-drag-tilt-angle))`
+      : CSS.Transform.toString(transform),
     transition,
   };
 
@@ -99,7 +102,7 @@ function Card({ card, isDone }: CardProps) {
   return (
     <div
       ref={setNodeRef}
-      className={`card${isDone ? ' is-done' : ''}`}
+      className={`card${isDone ? ' is-done' : ''}${isDragging ? ' is-dragging' : ''}`}
       style={{
         backgroundColor: `var(--color-card-${card.color})`,
         ...dragStyle,

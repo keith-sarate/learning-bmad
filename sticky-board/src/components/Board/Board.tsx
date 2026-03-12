@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback, useState } from 'react';
 import rough from 'roughjs';
 import {
   DndContext,
@@ -7,10 +7,11 @@ import {
   useSensors,
   closestCorners,
 } from '@dnd-kit/core';
-import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core';
+import type { DragStartEvent, DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 import type { ColumnConfig, Card, ColumnId } from '../../types/types';
 import { useBoardContext } from '../../context/BoardContext';
 import Column from '../Column/Column';
+import TrashZone from '../TrashZone/TrashZone';
 import './Board.css';
 
 const COLUMNS: ColumnConfig[] = [
@@ -23,6 +24,7 @@ function Board() {
   const containerRef = useRef<HTMLDivElement>(null);
   const boardSvgRef = useRef<SVGSVGElement>(null);
   const { boardState, dispatch } = useBoardContext();
+  const [activeOverColumnId, setActiveOverColumnId] = useState<ColumnId | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -72,8 +74,21 @@ function Board() {
     dispatch({ type: 'SET_DRAGGING', payload: { cardId: event.active.id as string } });
   }
 
-  function handleDragOver(_event: DragEndEvent) {
-    // Column highlight visual feedback is handled in Story 3.2
+  function handleDragOver(event: DragOverEvent) {
+    const { over } = event;
+    if (!over) {
+      setActiveOverColumnId(null);
+      return;
+    }
+    const overId = over.id as string;
+    const columnIds: ColumnId[] = ['todo', 'inProgress', 'done'];
+    if (columnIds.includes(overId as ColumnId)) {
+      setActiveOverColumnId(overId as ColumnId);
+    } else {
+      // over.id is a card ID — find which column that card belongs to
+      const col = columnIds.find((c) => boardState.columns[c].includes(overId));
+      setActiveOverColumnId(col ?? null);
+    }
   }
 
   function handleDragEnd(event: DragEndEvent) {
@@ -81,6 +96,7 @@ function Board() {
 
     // ALWAYS clear dragging first — even on cancelled drag (no over target)
     dispatch({ type: 'CLEAR_DRAGGING' });
+    setActiveOverColumnId(null);
 
     if (!over) return; // drag cancelled — card returns to original position
 
@@ -161,10 +177,12 @@ function Board() {
                 title={col.title}
                 emptyStateText={col.emptyStateText}
                 cards={columnCards}
+                isHighlighted={activeOverColumnId === col.id}
               />
             );
           })}
         </div>
+        <TrashZone />
       </DndContext>
     </div>
   );

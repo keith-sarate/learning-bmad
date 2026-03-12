@@ -13,6 +13,13 @@
   filter: saturate(0.7);
 }
 
+.card.is-dragging {
+  cursor: grabbing;
+  z-index: 1000;
+  /* tilt rotation is composed into the inline transform via dragStyle in Card.tsx */
+  /* no transform property here — that would conflict with useSortable's inline transform */
+}
+
 .card.is-done .card-title {
   font-weight: var(--font-weight-bold);
 }

@@ -1,0 +1,31 @@
+.trash-zone {
+  position: fixed;
+  bottom: var(--spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: var(--color-board-background);
+  border: 2px solid var(--color-trash-rest);
+  border-radius: 8px;
+  font-family: var(--font-handwritten);
+  color: var(--color-trash-rest);
+  font-size: var(--font-size-card-title);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1100;
+  pointer-events: all;
+  transition: background-color var(--transition-default),
+              color var(--transition-default),
+              border-color var(--transition-default);
+}
+
+.trash-zone-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.trash-zone-label {
+  font-weight: var(--font-weight-bold);
+}

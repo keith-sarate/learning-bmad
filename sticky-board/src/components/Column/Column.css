@@ -60,3 +60,8 @@
   margin: var(--spacing-sm) 0;
   min-height: 80px;
 }
+
+.column.column-highlighted {
+  box-shadow: 0 0 0 3px var(--color-column-highlight);
+  border-radius: 4px;
+}

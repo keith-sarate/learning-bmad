@@ -42,4 +42,16 @@ describe('Column', () => {
     );
     expect(screen.queryByText('Drag cards here to start')).not.toBeInTheDocument();
   });
+
+  it('applies column-highlighted class when isHighlighted is true', () => {
+    render(<Column id="todo" title="To Do" emptyStateText="Your tasks go here" isHighlighted={true} />);
+    const column = document.querySelector('[data-column-id="todo"]');
+    expect(column).toHaveClass('column-highlighted');
+  });
+
+  it('does NOT apply column-highlighted class when isHighlighted is false', () => {
+    render(<Column id="todo" title="To Do" emptyStateText="Your tasks go here" isHighlighted={false} />);
+    const column = document.querySelector('[data-column-id="todo"]');
+    expect(column).not.toHaveClass('column-highlighted');
+  });
 });
